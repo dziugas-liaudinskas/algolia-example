@@ -1,7 +1,7 @@
 import type { LinksFunction } from "@remix-run/node";
-import type { Hit as AlgoliaHit } from 'instantsearch.js';
-import algoliasearch from 'algoliasearch/lite';
-import React from 'react';
+import type { Hit as AlgoliaHit } from "instantsearch.js";
+import algoliasearch from "algoliasearch/lite";
+import React from "react";
 import {
   InstantSearch,
   Configure,
@@ -15,27 +15,25 @@ import {
   RefinementList,
   SearchBox,
   InstantSearchSSRProvider,
-} from 'react-instantsearch-hooks-web';
+} from "react-instantsearch-hooks-web";
 import type { InstantSearchServerState } from "react-instantsearch-hooks-web";
-
 
 import { Tab, Tabs } from "~/components/layout";
 import { QueryRuleContext, QueryRuleCustomData, Refresh } from "~/components";
 
-import { links as RefreshLinks } from '~/components/Refresh';
+import { links as RefreshLinks } from "~/components/Refresh";
 
-import stylesUrl from '../App.css';
+import stylesUrl from "../App.css";
 
 const instantsearchRouters = require(`instantsearch.js/cjs/lib/routers/index.js`);
 
 export const links: LinksFunction = () => {
-  return [...RefreshLinks(),
-    { rel: "stylesheet", href: stylesUrl }];
+  return [...RefreshLinks(), { rel: "stylesheet", href: stylesUrl }];
 };
 
 const searchClient = algoliasearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76'
+  "latency",
+  "6be0576ff61c053d5f9a3225e2a90f76"
 );
 
 type HitProps = {
@@ -48,14 +46,16 @@ type HitProps = {
 };
 
 function Hit({ hit }: HitProps) {
-  const isSpeaker = hit.categories.includes('Speakers');
+  const isSpeaker = hit.categories.includes("Speakers");
   return (
     <>
       <Highlight hit={hit} attribute="name" className="Hit-label" />
       <Highlight hit={hit} attribute="brand" className="Hit-label" />
       <span>
         Does hit categories include Speakers:
-        <span style={{ color: isSpeaker ? 'green' : 'red'}}>{isSpeaker ? ' YES' : ' NO'}</span>
+        <span style={{ color: isSpeaker ? "green" : "red" }}>
+          {isSpeaker ? " YES" : " NO"}
+        </span>
         &nbsp;&nbsp;&nbsp;
       </span>
       <span className="Hit-price">${hit.price}</span>
@@ -65,16 +65,16 @@ function Hit({ hit }: HitProps) {
 export default function Search({
   url,
   serverState,
-  facetFilters,
-} : {
-  url: URL,
-  serverState?: InstantSearchServerState,
-  facetFilters?: string[]
+  filters,
+}: {
+  url: URL;
+  serverState?: InstantSearchServerState;
+  filters?: string;
 }) {
   return (
     <main>
-      <h1>{facetFilters?.[0]}</h1>
-      <InstantSearchSSRProvider { ...serverState }>
+      <h1>{filters}</h1>
+      <InstantSearchSSRProvider {...serverState}>
         <InstantSearch
           searchClient={searchClient}
           indexName="instant_search"
@@ -89,7 +89,7 @@ export default function Search({
             }),
           }}
         >
-          <Configure facetFilters={facetFilters} />
+          <Configure filters={filters} />
 
           <div className="Container">
             <div>
@@ -100,8 +100,8 @@ export default function Search({
               <div className="Search-header">
                 <HitsPerPage
                   items={[
-                    { label: '20 hits per page', value: 20, default: true },
-                    { label: '40 hits per page', value: 40 },
+                    { label: "20 hits per page", value: 20, default: true },
+                    { label: "40 hits per page", value: 40 },
                   ]}
                 />
                 <Refresh />
@@ -111,8 +111,10 @@ export default function Search({
                 <CurrentRefinements
                   transformItems={(items) =>
                     items.map((item) => {
-                      const label = item.label.startsWith('hierarchicalCategories')
-                        ? 'Hierarchy'
+                      const label = item.label.startsWith(
+                        "hierarchicalCategories"
+                      )
+                        ? "Hierarchy"
                         : item.label;
 
                       return {
@@ -126,7 +128,7 @@ export default function Search({
 
               <QueryRuleContext
                 trackedFilters={{
-                  brand: () => ['Apple'],
+                  brand: () => ["Apple"],
                 }}
               />
 

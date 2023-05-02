@@ -11,18 +11,18 @@ export const links: LinksFunction = () => {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const url = new URL(request.url);
-  const facetFilters = ["hierarchicalCategories.lvl2:Audio > Home Audio > Speakers"];
+  const filters = 'hierarchicalCategories.lvl2:"Audio > Home Audio > Speakers"';
   const serverState = await getServerState(
-    <Search url={url} facetFilters={facetFilters} />,
+    <Search url={url} filters={filters} />,
     { renderToString }
   );
 
-  return json({ serverState, url, facetFilters });
+  return json({ serverState, url, filters });
 };
 
 export default function Category() {
-  const { url, serverState, facetFilters } = useLoaderData();
+  const { url, serverState, filters } = useLoaderData();
   return (
-    <Search url={url} serverState={serverState} facetFilters={facetFilters} />
+    <Search url={url} serverState={serverState} filters={filters} />
   )
 }
