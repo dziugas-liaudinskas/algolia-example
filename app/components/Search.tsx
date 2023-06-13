@@ -21,15 +21,18 @@ import type { InstantSearchServerState } from "react-instantsearch-hooks-web";
 
 import { Tab, Tabs } from "~/components/layout";
 import { QueryRuleContext, QueryRuleCustomData, Refresh } from "~/components";
+import Filters, { links as filtersLinks } from "~/components/Filters";
 
-import { links as RefreshLinks } from '~/components/Refresh';
+import { links as refreshLinks } from '~/components/Refresh';
 
 import stylesUrl from '../App.css';
 
 const instantsearchRouters = require(`instantsearch.js/cjs/lib/routers/index.js`);
 
 export const links: LinksFunction = () => {
-  return [...RefreshLinks(),
+  return [
+    ...refreshLinks(),
+    ...filtersLinks(),
     { rel: "stylesheet", href: stylesUrl }];
 };
 
@@ -73,7 +76,6 @@ export default function Search({
 }) {
   return (
     <main>
-      <h1>{facetFilters?.[0]}</h1>
       <InstantSearchSSRProvider { ...serverState }>
         <InstantSearch
           searchClient={searchClient}
@@ -93,7 +95,7 @@ export default function Search({
 
           <div className="Container">
             <div>
-              <RefinementList attribute="brand" />
+              <Filters />
             </div>
             <div className="Search">
               <SearchBox placeholder="Search" autoFocus />
