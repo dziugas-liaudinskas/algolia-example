@@ -33,7 +33,11 @@ export default function App() {
       </head>
       <body className="h-full">
         <Outlet />
-        <ScrollRestoration />
+        <ScrollRestoration getKey={(location) => {
+          console.log('ScrollRestoration: ', location);
+
+          return location.key;
+        }} />
         <Scripts />
         <LiveReload />
       </body>

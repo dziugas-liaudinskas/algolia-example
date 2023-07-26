@@ -17,6 +17,7 @@ import {
   InstantSearchSSRProvider,
 } from 'react-instantsearch-hooks-web';
 import type { InstantSearchServerState } from "react-instantsearch-hooks-web";
+import { Link } from "@remix-run/react";
 
 
 import { Tab, Tabs } from "~/components/layout";
@@ -26,6 +27,7 @@ import Filters, { links as filtersLinks } from "~/components/Filters";
 import { links as refreshLinks } from '~/components/Refresh';
 
 import stylesUrl from '../App.css';
+import { useInRouterContext } from "react-router";
 
 const instantsearchRouters = require(`instantsearch.js/cjs/lib/routers/index.js`);
 
@@ -47,13 +49,22 @@ type HitProps = {
     price: number;
     brand: string;
     categories: string[];
+    objectID: string;
   }>;
 };
 
 function Hit({ hit }: HitProps) {
+  const inRouterContext = useInRouterContext();
+  const { objectID } = hit;
   const isSpeaker = hit.categories.includes('Speakers');
+
+  if (!inRouterContext) {
+    // DynamicWidgets renders twice on the server, so we need to check if we're in a router context
+    // https://github.com/algolia/instantsearch/issues/5552
+    return null;
+  }
   return (
-    <>
+    <Link to={`/product/${objectID}`}>
       <Highlight hit={hit} attribute="name" className="Hit-label" />
       <Highlight hit={hit} attribute="brand" className="Hit-label" />
       <span>
@@ -62,7 +73,7 @@ function Hit({ hit }: HitProps) {
         &nbsp;&nbsp;&nbsp;
       </span>
       <span className="Hit-price">${hit.price}</span>
-    </>
+    </Link>
   );
 }
 export default function Search({
@@ -126,32 +137,32 @@ export default function Search({
                 />
               </div>
 
-              <QueryRuleContext
-                trackedFilters={{
-                  brand: () => ['Apple'],
-                }}
-              />
+              {/*<QueryRuleContext*/}
+              {/*  trackedFilters={{*/}
+              {/*    brand: () => ['Apple'],*/}
+              {/*  }}*/}
+              {/*/>*/}
 
-              <QueryRuleCustomData>
-                {({ items }) => (
-                  <>
-                    {items.map((item) => (
-                      <a href={item.link} key={item.banner}>
-                        <img src={item.banner} alt={item.title} />
-                      </a>
-                    ))}
-                  </>
-                )}
-              </QueryRuleCustomData>
+              {/*<QueryRuleCustomData>*/}
+              {/*  {({ items }) => (*/}
+              {/*    <>*/}
+              {/*      {items.map((item) => (*/}
+              {/*        <a href={item.link} key={item.banner}>*/}
+              {/*          <img src={item.banner} alt={item.title} />*/}
+              {/*        </a>*/}
+              {/*      ))}*/}
+              {/*    </>*/}
+              {/*  )}*/}
+              {/*</QueryRuleCustomData>*/}
 
               <Tabs>
                 <Tab title="Hits">
                   <Hits hitComponent={Hit} />
                   <Pagination className="Pagination" />
                 </Tab>
-                <Tab title="InfiniteHits">
-                  <InfiniteHits showPrevious hitComponent={Hit} />
-                </Tab>
+                {/*<Tab title="InfiniteHits">*/}
+                {/*  <InfiniteHits showPrevious hitComponent={Hit} />*/}
+                {/*</Tab>*/}
               </Tabs>
             </div>
           </div>

@@ -2,7 +2,7 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { renderToString } from "react-dom/server";
 import { getServerState } from "react-instantsearch-hooks-server";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link, useLocation } from "@remix-run/react";
 import Search, { links as searchLinks } from "~/components/Search";
 
 export const links: LinksFunction = () => {
@@ -21,8 +21,23 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 };
 
 export default function Category() {
+  const { pathname } = useLocation();
+
   const { url, serverState, facetFilters } = useLoaderData();
   return (
-    <Search url={url} serverState={serverState} facetFilters={facetFilters} />
+    <div>
+      <Search url={url} serverState={serverState} facetFilters={facetFilters} />
+      <div style={{ padding: '25px', textAlign: 'center'}}>
+      {pathname.includes('speakers') ? (
+        <Link to="/category/TV">
+          Check out our TV category
+        </Link>
+      ) : (
+        <Link to="/category/speakers">
+          LOAD SPEAKERS
+        </Link>
+      ) }
+      </div>
+    </div>
   )
 }

@@ -27,11 +27,11 @@ export function Tabs({ children }: { children: React.ReactNode }) {
   const [currentTab, setCurrentTab] = useState(0);
   const tabsRefs = useRef<HTMLElement[]>([]);
 
-  useEffect(() => {
-    if (!firstRender.current && tabsRefs.current) {
-      tabsRefs.current[currentTab].focus();
-    }
-  }, [currentTab]);
+  // useEffect(() => {
+  //   if (!firstRender.current && tabsRefs.current) {
+  //     tabsRefs.current[currentTab].focus();
+  //   }
+  // }, [currentTab]);
 
   useEffect(() => {
     firstRender.current = false;
