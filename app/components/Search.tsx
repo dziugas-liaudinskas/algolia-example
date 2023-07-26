@@ -99,6 +99,12 @@ export default function Search({
                   ? new URL(url)
                   : window.location;
               },
+              // push: (path: string) => {
+              //   console.log('path', path);
+              //   return typeof window === `undefined`
+              //     ? undefined
+              //     : window.history.pushState({}, ``, path);
+              // },
             }),
           }}
         >
